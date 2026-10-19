@@ -1,37 +1,220 @@
 /*
- * Pandoria – deliberately near-unstyled. Only layout tweaks and a serif font.
- * A styled version would add: ornamental frames (border-image or the
- * `decoration` slot), the castle artwork, compass roses and attribute icons
- * (all <ImageSlot>s), and dark banner plates for the section titles.
+ * Pandoria – rebuilt after referenzen/Unbenanntes_Projekt.pdf.
+ *
+ * The artwork in ./assets comes from the 300 dpi reference scan (1 px = 1/11.811 mm).
+ * The frames are redrawn at 3× that: straight rules are drawn clean, only the
+ * corner ornaments come from the scan. Slices are given in those 3× pixels:
+ *   frame.png       9-slice panel frame (double rule + filigree corners), 390 px slices
+ *   frame-tl/tr/bl/br.png   the same with one plain corner, for the panels sitting
+ *                   under a page-frame corner piece
+ *   page-frame.png  9-slice page frame with the large corner pieces, 720 px slices
+ *   plate.png       3-slice black heading plate, 72 px ends
+ *   arrow.png       heading ornament (mirrored for the right-hand side)
  */
 .sheet-pandoria {
-  --cs-font: Georgia, "Times New Roman", serif;
-  --cs-font-size: 10pt;
-  --cs-label-size: 9.5pt;
-  --cs-title-size: 10.5pt;
-  --cs-row-height: 6.5mm;
+  --cs-font: "EB Garamond", Georgia, serif;
+  --cs-heading-font: "Roboto Serif Variable", "EB Garamond", serif;
+  --cs-font-size: 12pt;
+  --cs-label-size: 12pt;
+  --cs-title-size: 11pt;
+  --cs-line-width: 0.3mm;
+  --cs-row-height: 7mm;
+  --cs-pip-size: 4.5mm;
+
+  --pd-rule: 1.3mm;          /* thickness of the panel frame's double rule */
+  --pd-pad: 4mm;             /* inner padding of every panel */
+  --pd-head: 7mm;            /* height of a panel's heading row */
+  --pd-table-head: 6.5mm;    /* height of a table's column-header row */
+  --pd-table-size: 10pt;     /* text in tables */
+  --pd-compass: 29mm;        /* width of the compass roses */
+  --pd-row-rule: #a8a8a8;    /* light row lines in tables */
+  --pd-col-rule: #777;       /* vertical column lines in tables */
+
+  font-weight: 500;
+  letter-spacing: -0.015em;
 }
 
-.sheet-pandoria .cs-section__title { font-variant: small-caps; text-transform: none; letter-spacing: 0.03em; }
+/* ---------- page frame ---------- */
 
-/* title block */
-.sheet-pandoria .pd-title { position: relative; }
-.sheet-pandoria .pd-title__art { position: absolute; inset: 0; z-index: 0; }
-.sheet-pandoria .pd-title__name,
-.sheet-pandoria .pd-title__sub { position: relative; text-align: center; font-variant: small-caps; }
-.sheet-pandoria .pd-title__name { font-size: 26pt; line-height: 1.05; margin-top: 4mm; width: 60%; }
-.sheet-pandoria .pd-title__sub { font-size: 11pt; letter-spacing: 0.15em; margin-bottom: 4mm; }
+/*
+ * Inset so that the corner pieces' line stubs (56 scan px in) meet the outer rule of
+ * the corner panels, which sit at the 8 mm page margin: 8mm - 56/11.811 = 3.26mm.
+ */
+.sheet-pandoria .cs-page::after {
+  content: "";
+  position: absolute;
+  inset: 3.26mm;
+  border-style: solid;
+  border-width: 20.32mm;
+  border-image: url("./assets/page-frame.png") 720 / 20.32mm stretch;
+  pointer-events: none;
+  z-index: 10;
+}
 
-/* ornaments sit in the lower right corner of their panel */
-.sheet-pandoria .pd-compass { position: absolute; right: 3mm; bottom: 3mm; width: 26mm; height: 26mm; }
-.sheet-pandoria .pd-background,
-.sheet-pandoria .pd-traits { margin-right: 28mm; }
+/* ---------- panels ---------- */
 
-.sheet-pandoria .pd-werte { align-items: center; }
+.sheet-pandoria .cs-section {
+  border-style: solid;
+  border-width: var(--pd-rule);
+  border-image: url("./assets/frame.png") 390 / 11mm / 0.68mm stretch;
+  padding: 0 var(--pd-pad) var(--pd-pad);
+  gap: 0;
+}
+/* The page-frame corner pieces replace these panels' own corner ornament. */
+.sheet-pandoria .pd-ident { border-image-source: url("./assets/frame-tl.png"); }
+.sheet-pandoria .pd-traits { border-image-source: url("./assets/frame-tr.png"); }
+.sheet-pandoria .pd-pilger { border-image-source: url("./assets/frame-bl.png"); }
+.sheet-pandoria .pd-passive { border-image-source: url("./assets/frame-br.png"); }
+.sheet-pandoria .cs-section__body { gap: 0; }
+.sheet-pandoria .cs-section > .cs-section__header {
+  height: var(--pd-head);
+  flex: none;
+  justify-content: center;
+}
+.sheet-pandoria .cs-section__title {
+  font-variant: small-caps;
+  font-stretch: 60%;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
 
-/* section titles centred like the reference */
-.sheet-pandoria .pd-attributes .cs-section__header,
-.sheet-pandoria .pd-passive .cs-section__header { justify-content: center; }
+/*
+ * Two heading styles:
+ *   framed panels  "—◆ Title ◆—" between two arrow ornaments
+ *   .pd-plated     white title on a black plate set into the top border (below)
+ */
+.sheet-pandoria .cs-section:not(.pd-plated) > .cs-section__header { margin: 0 calc(-1 * var(--pd-pad)); }
+.sheet-pandoria .pd-table-panel > .cs-section__header { margin: 0; }
+.sheet-pandoria .cs-section:not(.pd-plated) .cs-section__title { display: inline-flex; align-items: center; white-space: nowrap; }
+.sheet-pandoria .cs-section:not(.pd-plated) .cs-section__title::before,
+.sheet-pandoria .cs-section:not(.pd-plated) .cs-section__title::after {
+  content: "";
+  flex: none;
+  width: 6.5mm;
+  height: 2.1mm;
+  margin: 0 1.2mm;
+  background: url("./assets/arrow.png") center / contain no-repeat;
+}
+.sheet-pandoria .cs-section:not(.pd-plated) .cs-section__title::after { transform: scaleX(-1); }
+
+/* Compass roses sit in a bottom corner (right by default); the lines beside them are shortened. */
+.sheet-pandoria .pd-compass {
+  position: absolute;
+  right: var(--pd-pad);
+  bottom: var(--pd-pad);
+  width: var(--pd-compass);
+}
+
+/* ---------- Ident ---------- */
+
+.sheet-pandoria .pd-ident { --cs-label-width: 13mm; }
+.sheet-pandoria .pd-ident .cs-field { --cs-row-height: 8mm; }
+.sheet-pandoria .pd-background { margin-top: 3mm; }
+.sheet-pandoria .pd-background .cs-lines__line:nth-child(n + 3) { margin-left: calc(var(--pd-compass) + 2mm); }
+.sheet-pandoria .pd-ident .pd-compass { right: auto; left: var(--pd-pad); }
+
+/* ---------- title art ---------- */
+
+/*
+ * The title art comes in three pieces cut from the scan, all drawn at one scale
+ * (--pd-art = mm per scan pixel). The castles have straight cut edges on their
+ * outer side and bottom; those edges tuck under the neighbouring frames, which
+ * get a paper background and sit on top.
+ */
+.sheet-pandoria .pd-title { position: relative; --pd-art: calc(54mm / 699); }
+.sheet-pandoria .pd-castles { position: absolute; bottom: -3.3mm; }
+.sheet-pandoria .pd-castles--left { left: -3.7mm; width: calc(580 * var(--pd-art)); }
+.sheet-pandoria .pd-castles--right { right: -3.7mm; width: calc(520 * var(--pd-art)); }
+.sheet-pandoria .pd-lettering { position: relative; z-index: 1; width: calc(689 * var(--pd-art)); }
+.sheet-pandoria .pd-ident,
+.sheet-pandoria .pd-traits,
+.sheet-pandoria .pd-werte { z-index: 1; background: var(--cs-paper); }
+
+/* ---------- Körperliche Merkmale ---------- */
+
+.sheet-pandoria .pd-traits .cs-bullets__item:nth-child(n + 7) { margin-right: calc(var(--pd-compass) + 2mm); }
+.sheet-pandoria .pd-traits .cs-bullets__marker { font-size: 13pt; line-height: 1; padding: 0 1.4mm 0.9mm 0; }
+
+/* ---------- black plates (Werte, Ressourcen) ---------- */
+
+/* The plate is centred on the frame's top rule. */
+.sheet-pandoria .pd-plated[data-title-placement="banner"] { margin-top: 0; }
+.sheet-pandoria .pd-plated > .cs-section__header {
+  top: -0.3mm;
+  height: 8.55mm;
+  padding: 0 0.6mm 0.3mm;
+  background: none;
+  border-style: solid;
+  border-width: 0 6.1mm;
+  border-image: url("./assets/plate.png") 0 72 fill / 0 6.1mm stretch;
+  color: var(--cs-paper);
+}
+.sheet-pandoria .pd-plated .cs-section__title { font-size: 14pt; }
+.sheet-pandoria .pd-plated .cs-fraction__separator { font-weight: 700; }
+/* These panels are short, so keep their fields clear of the frame's corner pieces. */
+.sheet-pandoria .pd-plated { padding-left: 7mm; padding-right: 7mm; }
+
+/* ---------- Werte ---------- */
+
+.sheet-pandoria .pd-werte { padding-top: 3mm; padding-bottom: 3mm; }
+.sheet-pandoria .pd-werte .cs-grid { align-items: center; }
+.sheet-pandoria .pd-werte .cs-stack { --cs-label-width: 17mm; }
+
+.sheet-pandoria .pd-aw { align-self: end; justify-self: center; }
+.sheet-pandoria .pd-aw .cs-valuebox__box {
+  aspect-ratio: 355 / 290;
+  background: url("./assets/shield.png") center / contain no-repeat;
+}
+.sheet-pandoria .pd-aw .cs-valuebox__outline { display: none; }
+/* Small "AW" at the top of the shield's inner field, like the kit's default inside label. */
+.sheet-pandoria .pd-aw > .cs-valuebox__label { top: 7.2mm; font-size: 8pt; font-weight: 600; letter-spacing: 0.08em; }
+
+/* ---------- Ressourcen ---------- */
+
+/* Fields start just below the plate (-0.3 + 8.55 mm from the frame's outer edge). */
+.sheet-pandoria .pd-res { padding-top: 8mm; padding-bottom: 0; }
+.sheet-pandoria .pd-res .cs-fraction { flex: 1 1 auto; }
+
+/* ---------- table panels ---------- */
+
+.sheet-pandoria .pd-table-panel { padding: 0 0 2mm; }
+/* Rows only set a minimum here; `fill` tables share out the panel height. */
+.sheet-pandoria .pd-table-panel .cs-table { --cs-row-height: 5mm; }
+
+.sheet-pandoria .cs-table__th {
+  height: var(--pd-table-head);
+  font-size: var(--pd-table-size);
+  font-weight: 600;
+  vertical-align: middle;
+  border-width: 0.35mm 0.3mm;
+  border-left-color: var(--pd-col-rule);
+  border-right-color: var(--pd-col-rule);
+}
+.sheet-pandoria .cs-table__td {
+  font-size: var(--pd-table-size);
+  border-top: none;
+  border-bottom: var(--cs-line-width) solid var(--pd-row-rule);
+  border-left-color: var(--pd-col-rule);
+  border-right-color: var(--pd-col-rule);
+}
+.sheet-pandoria .cs-table__row:last-child .cs-table__td { border-bottom: none; }
+.sheet-pandoria .cs-table__th:first-child,
+.sheet-pandoria .cs-table__td:first-child { border-left: none; }
+.sheet-pandoria .cs-table__th:last-child,
+.sheet-pandoria .cs-table__td:last-child { border-right: none; }
+
+/* Pilger: black column rule beside the circles */
+.sheet-pandoria .pd-pilger .cs-table__td:first-child + .cs-table__td { border-left-color: var(--cs-ink); }
+.sheet-pandoria .pd-pilger .cs-pip { border-width: 0.6mm; }
+
+/* Attribute: solid row rules, icon before each name */
+.sheet-pandoria .pd-attributes .cs-table__td { border-bottom-color: var(--cs-ink); }
+.sheet-pandoria .pd-attributes .cs-table__td[data-key="label"] { padding-left: 1.5mm; }
+.sheet-pandoria .pd-attributes .cs-stattable__label { gap: 2mm; }
+.sheet-pandoria .pd-icon { width: 6mm; height: 6mm; }
+
+/* ---------- Passive Fähigkeit ---------- */
+
 .sheet-pandoria .pd-passive__box { border: none; }
-
-.sheet-pandoria .pd-icon { width: 4.5mm; height: 4.5mm; border-radius: 50%; }
