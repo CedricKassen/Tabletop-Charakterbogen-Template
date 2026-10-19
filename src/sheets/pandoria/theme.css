@@ -1,0 +1,37 @@
+/*
+ * Pandoria – deliberately near-unstyled. Only layout tweaks and a serif font.
+ * A styled version would add: ornamental frames (border-image or the
+ * `decoration` slot), the castle artwork, compass roses and attribute icons
+ * (all <ImageSlot>s), and dark banner plates for the section titles.
+ */
+.sheet-pandoria {
+  --cs-font: Georgia, "Times New Roman", serif;
+  --cs-font-size: 10pt;
+  --cs-label-size: 9.5pt;
+  --cs-title-size: 10.5pt;
+  --cs-row-height: 6.5mm;
+}
+
+.sheet-pandoria .cs-section__title { font-variant: small-caps; text-transform: none; letter-spacing: 0.03em; }
+
+/* title block */
+.sheet-pandoria .pd-title { position: relative; }
+.sheet-pandoria .pd-title__art { position: absolute; inset: 0; z-index: 0; }
+.sheet-pandoria .pd-title__name,
+.sheet-pandoria .pd-title__sub { position: relative; text-align: center; font-variant: small-caps; }
+.sheet-pandoria .pd-title__name { font-size: 26pt; line-height: 1.05; margin-top: 4mm; width: 60%; }
+.sheet-pandoria .pd-title__sub { font-size: 11pt; letter-spacing: 0.15em; margin-bottom: 4mm; }
+
+/* ornaments sit in the lower right corner of their panel */
+.sheet-pandoria .pd-compass { position: absolute; right: 3mm; bottom: 3mm; width: 26mm; height: 26mm; }
+.sheet-pandoria .pd-background,
+.sheet-pandoria .pd-traits { margin-right: 28mm; }
+
+.sheet-pandoria .pd-werte { align-items: center; }
+
+/* section titles centred like the reference */
+.sheet-pandoria .pd-attributes .cs-section__header,
+.sheet-pandoria .pd-passive .cs-section__header { justify-content: center; }
+.sheet-pandoria .pd-passive__box { border: none; }
+
+.sheet-pandoria .pd-icon { width: 4.5mm; height: 4.5mm; border-radius: 50%; }

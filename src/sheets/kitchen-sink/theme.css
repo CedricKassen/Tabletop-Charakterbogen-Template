@@ -1,0 +1,8 @@
+/* The kitchen sink stays unstyled on purpose – it shows the kit's defaults. */
+.sheet-kitchen-sink .ks-corner {
+  position: absolute;
+  right: 1.5mm;
+  top: 0.5mm;
+  font-size: 14pt;
+  color: var(--cs-muted);
+}

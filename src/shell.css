@@ -1,0 +1,42 @@
+/* Preview chrome around the sheets. Not part of the kit, never printed. */
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+}
+
+@media screen {
+  body { background: #d4d4d4; }
+
+  .shell-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 16px;
+    background: #222;
+    color: #eee;
+    font-size: 14px;
+  }
+  .shell-toolbar a { color: #9cf; }
+  .shell-toolbar button { margin-left: auto; }
+
+  .cs-document {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 24px;
+  }
+  .cs-document > .cs-page,
+  .cs-document > * > .cs-page { box-shadow: 0 2px 12px rgb(0 0 0 / 0.3); }
+
+  .shell-index { max-width: 600px; margin: 40px auto; background: #fff; padding: 24px 32px; }
+  .shell-error { color: crimson; padding: 24px; }
+}
+
+@media print {
+  .shell-toolbar { display: none; }
+}
