@@ -39,7 +39,7 @@ scripts/export-pdf.ts
 Example sheets:
 
 - `kitchen-sink`: every component and variant with default styling. It's the catalog.
-- `pandoria`: the reference sheet in `referenzen/` rebuilt (structure only).
+- `pandoria`: the two reference sheets in `referenzen/` rebuilt as a two-page sheet.
 
 ## Making a new sheet
 

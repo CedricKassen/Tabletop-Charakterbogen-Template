@@ -7,9 +7,14 @@
  *   frame.png       9-slice panel frame (double rule + filigree corners), 390 px slices
  *   frame-tl/tr/bl/br.png   the same with one plain corner, for the panels sitting
  *                   under a page-frame corner piece
+ *   frame-l.png     the same with both left corners plain (page 2's full-height panel)
  *   page-frame.png  9-slice page frame with the large corner pieces, 720 px slices
  *   plate.png       3-slice black heading plate, 72 px ends
  *   arrow.png       heading ornament (mirrored for the right-hand side)
+ *
+ * Page 2's icons (skill-*, armor-*) and the sword are traced from the photo
+ * referenzen/Foto - Ch. Bo. Spieler.pdf to SVG; the skill icons get a redrawn
+ * compass ring.
  */
 .sheet-pandoria {
   --cs-font: "EB Garamond", Georgia, serif;
@@ -65,6 +70,9 @@
 .sheet-pandoria .pd-traits { border-image-source: url("./assets/frame-tr.png"); }
 .sheet-pandoria .pd-pilger { border-image-source: url("./assets/frame-bl.png"); }
 .sheet-pandoria .pd-passive { border-image-source: url("./assets/frame-br.png"); }
+.sheet-pandoria .pd-skills2 { border-image-source: url("./assets/frame-l.png"); }
+.sheet-pandoria .pd-armor { border-image-source: url("./assets/frame-tr.png"); }
+.sheet-pandoria .pd-items { border-image-source: url("./assets/frame-br.png"); }
 .sheet-pandoria .cs-section__body { gap: 0; }
 .sheet-pandoria .cs-section > .cs-section__header {
   height: var(--pd-head);
@@ -218,3 +226,50 @@
 /* ---------- Passive Fähigkeit ---------- */
 
 .sheet-pandoria .pd-passive__box { border: none; }
+
+/* ================= page 2 ================= */
+
+/* ---------- Fertigkeiten / Proben ---------- */
+
+/*
+ * Header table + one block per group (icon cell | headless table). Groups are
+ * separated by a solid rule; a group needs at least the icon's height.
+ */
+.sheet-pandoria .pd-skills2 { --pd-skill-icon: 15mm; }
+.sheet-pandoria .pd-skills-head .cs-table__th { font-size: 9pt; line-height: 1.05; }
+.sheet-pandoria .pd-skills-head .cs-table__th[data-key="name"] { font-size: var(--pd-table-size); }
+.sheet-pandoria .pd-skill-group {
+  min-height: calc(var(--pd-skill-icon) + 1mm);
+  border-top: 0.35mm solid var(--cs-ink);
+}
+.sheet-pandoria .pd-skills-head + .pd-skill-group { border-top: none; }
+.sheet-pandoria .pd-skill-group__icon { border-right: var(--cs-line-width) solid var(--pd-col-rule); }
+.sheet-pandoria .pd-skill-group__icon .cs-image { width: var(--pd-skill-icon); height: var(--pd-skill-icon); }
+.sheet-pandoria .pd-skill-group .cs-table__td:first-child { padding-left: 2mm; }
+/* The group's own row: its name in bold, a size up. */
+.sheet-pandoria .pd-skill-group .cs-table__row:first-child .cs-table__td[data-key="name"] {
+  font-size: 11.5pt;
+  font-weight: 700;
+}
+
+/* ---------- Gegenstände & Ausrüstung ---------- */
+
+.sheet-pandoria .pd-armor .cs-table__td { border-bottom-color: var(--cs-ink); }
+.sheet-pandoria .pd-armor .cs-table__td[data-key="label"] { padding-left: 2mm; font-size: 11pt; font-weight: 700; }
+.sheet-pandoria .pd-armor .cs-stattable__label { gap: 3mm; }
+.sheet-pandoria .pd-armor .cs-stattable__icon { width: 9.5mm; height: 9.5mm; }
+.sheet-pandoria .pd-armor__icon { width: 9.5mm; height: 9.5mm; }
+
+/* ---------- Waffen ---------- */
+
+/*
+ * The sword is the table's first column, spanning header and rows: the header's
+ * top rule runs across it and a column rule closes it off on the right.
+ */
+.sheet-pandoria .pd-sword {
+  height: 100%;
+  padding: 1mm 0.5mm;
+  border-top: 0.35mm solid var(--cs-ink);
+  border-right: 0.3mm solid var(--pd-col-rule);
+}
+.sheet-pandoria .pd-weapons .cs-table__th:first-child { border-left: none; }
