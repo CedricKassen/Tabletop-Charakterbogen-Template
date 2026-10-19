@@ -1,15 +1,15 @@
 /*
  * Pandoria – rebuilt after referenzen/Unbenanntes_Projekt.pdf.
  *
- * The artwork in ./assets comes from the 300 dpi reference scan (1 px = 1/11.811 mm).
- * The frames are redrawn at 3× that: straight rules are drawn clean, only the
- * corner ornaments come from the scan. Slices are given in those 3× pixels:
- *   frame.png       9-slice panel frame (double rule + filigree corners), 390 px slices
- *   frame-tl/tr/bl/br.png   the same with one plain corner, for the panels sitting
+ * Raster artwork in ./assets (title, compass, shield, icons, arrow) comes from the
+ * 300 dpi reference scan. The frames and the heading plate are vector drawings made by
+ * scripts/pandoria-art.ts (all sizes in mm; rerun it after changing the drawing):
+ *   frame.svg       9-slice panel frame: double rule, scrolled corners, 11 mm slices
+ *   frame-tl/tr/bl/br.svg   the same with one plain corner, for the panels sitting
  *                   under a page-frame corner piece
- *   frame-l.png     the same with both left corners plain (page 2's full-height panel)
- *   page-frame.png  9-slice page frame with the large corner pieces, 720 px slices
- *   plate.png       3-slice black heading plate, 72 px ends
+ *   frame-l.svg     the same with both left corners plain (page 2's full-height panel)
+ *   page-frame.svg  9-slice page frame with the large scrolled corners, 20.32 mm slices
+ *   plate.svg       black heading plate; scales to its element, the ends keep their size
  *   arrow.png       heading ornament (mirrored for the right-hand side)
  *
  * Page 2's icons (skill-*, armor-*) and the sword are traced from the photo
@@ -51,7 +51,7 @@
   inset: 3.26mm;
   border-style: solid;
   border-width: 20.32mm;
-  border-image: url("./assets/page-frame.png") 720 / 20.32mm stretch;
+  border-image: url("./assets/page-frame.svg") 20.32 / 20.32mm stretch;
   pointer-events: none;
   z-index: 10;
 }
@@ -61,18 +61,18 @@
 .sheet-pandoria .cs-section {
   border-style: solid;
   border-width: var(--pd-rule);
-  border-image: url("./assets/frame.png") 390 / 11mm / 0.68mm stretch;
+  border-image: url("./assets/frame.svg") 11 / 11mm / 0.68mm stretch;
   padding: 0 var(--pd-pad) var(--pd-pad);
   gap: 0;
 }
 /* The page-frame corner pieces replace these panels' own corner ornament. */
-.sheet-pandoria .pd-ident { border-image-source: url("./assets/frame-tl.png"); }
-.sheet-pandoria .pd-traits { border-image-source: url("./assets/frame-tr.png"); }
-.sheet-pandoria .pd-pilger { border-image-source: url("./assets/frame-bl.png"); }
-.sheet-pandoria .pd-passive { border-image-source: url("./assets/frame-br.png"); }
-.sheet-pandoria .pd-skills2 { border-image-source: url("./assets/frame-l.png"); }
-.sheet-pandoria .pd-armor { border-image-source: url("./assets/frame-tr.png"); }
-.sheet-pandoria .pd-items { border-image-source: url("./assets/frame-br.png"); }
+.sheet-pandoria .pd-ident { border-image-source: url("./assets/frame-tl.svg"); }
+.sheet-pandoria .pd-traits { border-image-source: url("./assets/frame-tr.svg"); }
+.sheet-pandoria .pd-pilger { border-image-source: url("./assets/frame-bl.svg"); }
+.sheet-pandoria .pd-passive { border-image-source: url("./assets/frame-br.svg"); }
+.sheet-pandoria .pd-skills2 { border-image-source: url("./assets/frame-l.svg"); }
+.sheet-pandoria .pd-armor { border-image-source: url("./assets/frame-tr.svg"); }
+.sheet-pandoria .pd-items { border-image-source: url("./assets/frame-br.svg"); }
 .sheet-pandoria .cs-section__body { gap: 0; }
 .sheet-pandoria .cs-section > .cs-section__header {
   height: var(--pd-head);
@@ -153,10 +153,10 @@
   top: -0.3mm;
   height: 8.55mm;
   padding: 0 0.6mm 0.3mm;
-  background: none;
-  border-style: solid;
+  border: solid transparent;
   border-width: 0 6.1mm;
-  border-image: url("./assets/plate.png") 0 72 fill / 0 6.1mm stretch;
+  /* plate.svg takes the element's width; its ends keep their size (see scripts/pandoria-art.ts) */
+  background: url("./assets/plate.svg") 0 0 / 100% 100% no-repeat border-box;
   color: var(--cs-paper);
 }
 .sheet-pandoria .pd-plated .cs-section__title { font-size: 14pt; }
